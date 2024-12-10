@@ -1,0 +1,7 @@
+.vscode/
+__pycache__/
+*.csv
+*.png
+*.mp4
+*.yml
+!template.yml
