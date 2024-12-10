@@ -2,3 +2,5 @@ video_path: ../data/videos/movine_name.mp4
 
 output_image_path: ../data/images/
 output_csv_path: ../data/csv/
+
+max_block_size: 51  # only odd number

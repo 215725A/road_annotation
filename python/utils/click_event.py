@@ -21,13 +21,16 @@ def click_event(event, x, y, flags, param):
   frame = param['frame']
   output_image_path = param['output_image_path']
   output_csv_path = param['output_csv_path']
+  max_block_size = param['max_block_size']
 
   if event == cv2.EVENT_LBUTTONDOWN:
     print(f'Clicked position: ({x}, {y})')
 
     height, width = frame.shape[:2]
 
-    for block_size in range(3, 22, 2):
+    block_sizes = [i for i in range(3, max_block_size+1, 2)]
+
+    for block_size in block_sizes:
       half_block = block_size // 2
 
       start_x = max(x - half_block, 0)
@@ -52,7 +55,7 @@ def click_event(event, x, y, flags, param):
 
       print(f"Image: {output_filename} and label: '{label}' saved")
 
-      if block_size == 21:
+      if block_size == max_block_size:
         break
       print("Press the key to proceed to the next image")
       cv2.waitKey(0)

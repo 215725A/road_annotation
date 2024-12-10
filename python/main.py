@@ -11,6 +11,7 @@ def main(yaml_path):
   video_path = config['video_path']
   output_image_path = config['output_image_path']
   output_csv_path = config['output_csv_path']
+  max_block_size = config['max_block_size']
 
   create_dir(output_image_path)
   create_dir(output_csv_path)
@@ -24,7 +25,7 @@ def main(yaml_path):
     print("Video not loaded")
     exit()
 
-  params = {'frame': frame, 'output_image_path': output_image_path, 'output_csv_path': output_csv_path}
+  params = {'frame': frame, 'output_image_path': output_image_path, 'output_csv_path': output_csv_path, 'max_block_size': max_block_size}
 
   cv2.imshow('Image', frame)
   cv2.setMouseCallback("Image", click_event, param=params)
