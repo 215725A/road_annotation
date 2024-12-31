@@ -32,6 +32,8 @@ def main(yaml_path):
 
   cv2.waitKey(0)
   cv2.destroyAllWindows()
+  
+  cap.release()
 
 
 if __name__ == '__main__':
