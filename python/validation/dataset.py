@@ -51,6 +51,8 @@ class Dataset:
         
         color = (0, 255, 0) if pred.item() == 1 else (0, 0, 255)
         output_frame[y:y+self.patch_size, x:x+self.patch_size] = color
+    
+    print(f'Frame {frame_num} finish')
 
     return (frame_num, output_frame) 
 
@@ -128,5 +130,57 @@ class Dataset:
     end_process = time.perf_counter()
 
     print(f'process time: {end_process - start_process:.4f} second')
+
+    cv2.destroyAllWindows()
+  
+  def run3(self):
+    cap = cv2.VideoCapture(self.input_video_path)
+    
+    frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+    frames = []
+    frame_num = 0
+
+    save_frame_nums = [1, 100, 200, 250, 300, 400, 500, 600, 630, 700, 750, 800, 900, 1000, 1060, 1350, 1450, 1500, 1700, 1800]
+
+    while cap.isOpened():
+      ret, frame = cap.read()
+
+      if not ret:
+        break
+
+      frame_num += 1
+
+      if frame_num in save_frame_nums:
+        frames.append((frame_num, frame))
+    
+    cap.release()
+
+    for frame_num, frame in frames:
+      exec_start = time.perf_counter()
+      print(f'Frame {frame_num} start')
+
+      image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+      output_frame = np.zeros_like(frame)
+
+      for y in range(0, frame_height - self.patch_size + 1):
+        for x in range(0, frame_width - self.patch_size + 1):
+          patch = image[y:y+self.patch_size, x:x+self.patch_size]
+
+          patch_tensor = self.transform(patch).unsqueeze(0).to(self.device)
+          with torch.no_grad():
+            output = self.model(patch_tensor)
+            _, pred = torch.max(output, 1)
+          
+          color = (0, 255, 0) if pred.item() == 1 else (0, 0, 255)
+          output_frame[y:y+self.patch_size, x:x+self.patch_size] = color
+      
+      save_path = self.output_frame_path.format(frame_num=frame_num)
+      cv2.imwrite(save_path, output_frame)
+      
+      exec_end = time.perf_counter()
+      print(f'Frame {frame_num} finish')
+      print(f'Process time: {exec_end - exec_start:.4f} second')
 
     cv2.destroyAllWindows()

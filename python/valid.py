@@ -22,8 +22,9 @@ def main(yaml_path):
   # モデルのロード（学習済みモデルをロード）
   model = Dataset(model_path, video_path, output_video_path, output_frame_path, patch_size)
   
-  # model.run()  # 学習したモデルを指定
-  model.run2()
+  # model.run()  # process for video
+  # model.run2() # process for only one frame
+  model.run3() # process for few frame
 
 
 if __name__ == '__main__':
