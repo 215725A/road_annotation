@@ -65,3 +65,28 @@ def click_event(event, x, y, flags, param):
         print("Press the key to proceed to the next image")
 
     cv2.destroyAllWindows()
+
+def select_points(event, x, y, flags, param):
+  frame = param['frame']
+  points = param['points']
+
+  if event == cv2.EVENT_LBUTTONDOWN:
+    points.append((x, y))
+    print(f'Point {len(points)} selected: ({x}, {y})')
+
+  if event == cv2.EVENT_RBUTTONDOWN and len(points) > 0:
+    del points[-1]
+
+  temp_img = frame.copy()
+  h, w = temp_img.shape[0], temp_img.shape[1]
+  cv2.line(temp_img, (x, 0), (x, h), (255, 255, 255), 1)
+  cv2.line(temp_img, (0, y), (w, y), (255, 255, 255), 1)
+
+  for i in range(len(points)):
+    cv2.circle(temp_img, (points[i][0], points[i][1]), 3, (128, 128, 128), 3)
+
+    if 0 < i:
+      cv2.line(temp_img, (points[i][0], points[i][1]),
+      (points[i-1][0], points[i-1][1]), (0, 0, 0), 2)
+
+  cv2.imshow('Select 4 points', temp_img)

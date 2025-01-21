@@ -2,5 +2,14 @@ video_path: ../data/videos/movine_name.mp4
 
 output_image_path: ../data/images/
 output_csv_path: ../data/csv/
+output_model_path: ../data/model/model_name_{epoch}.pt
+output_video_path: ../data/res_movie/result_{patch_size}.mp4
+output_frame_path: ../data/res_img/resul?{frame_numt.png
+
+image_path: ../data/images
+csv_file: ../data/csv/csv_name.csv
 
 max_block_size: 51  # only odd number
+
+epoch: 100
+patch_size: 5
