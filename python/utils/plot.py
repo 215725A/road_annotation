@@ -81,3 +81,55 @@ def plot_f1_score(epochs, train_f1_scores, val_f1_scores):
   plt.grid()
   plt.savefig(fig_path, bbox_inches='tight')
   plt.show()
+
+
+def plot_car_area(road_areas, car_counts):
+  fig_path = f'../data/plots/car_area.png'
+  create_dir(fig_path)
+
+  plt.scatter(road_areas, car_counts, color='blue', alpha=0.7, label='Car vs. Road Area')
+  plt.title('Cars vs. Road Area')
+  plt.xlabel('Road Area (px)')
+  plt.ylabel('Number of cars')
+  plt.legend()
+  plt.grid()
+  plt.savefig(fig_path, bbox_inches='tight')
+  plt.show()
+
+def plot_least_square(road_areas, car_counts, a, b):
+  fig_path = f'../data/plots/least_square.png'
+  create_dir(fig_path)
+
+  plt.scatter(car_counts, road_areas, color="blue", label="Car vs. Road Area vs. Least Square")
+  plt.title('Cars vs. Road Area vs. Least Square')
+
+  x_vals = range(min(car_counts), max(car_counts) + 1)
+  y_vals = [a * x + b for x in x_vals]
+
+  plt.plot(x_vals, y_vals, color="red", label=f"Approximation: y = {a:.6f}x + {b:.2f}")
+
+  plt.xlabel("Car Counts")
+  plt.ylabel("Road Area(px)")
+  plt.legend()
+  plt.grid()
+  plt.title("Linear Regression using Least Squares Method")
+  plt.savefig(fig_path, bbox_inches='tight')
+  plt.show()
+
+def plot_congestion_rate(predict_congestion, actual_congestion):
+  fig_path = f'../data/plots/congestion_rates.png'
+  create_dir(fig_path)
+
+  x_val = [i for i in range(1, len(predict_congestion)+1)]
+
+  plt.plot(x_val, predict_congestion, label='Predict Congestion', marker='o', color='blue')
+  plt.plot(x_val, actual_congestion, label='Actual Congestion', marker='x', color='red')
+  plt.title('Compare predicted and actual congestion rates')
+  plt.xlabel('frames')
+  plt.ylabel('Congestion Rate(%)')
+  plt.xticks(range(1, len(predict_congestion) + 1))
+  plt.ylim(0, 50)
+  plt.legend()
+  plt.grid()
+  plt.savefig(fig_path, bbox_inches='tight')
+  plt.show()

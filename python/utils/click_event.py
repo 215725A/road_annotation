@@ -66,6 +66,7 @@ def click_event(event, x, y, flags, param):
 
     cv2.destroyAllWindows()
 
+
 def select_points(event, x, y, flags, param):
   frame = param['frame']
   points = param['points']
@@ -90,3 +91,44 @@ def select_points(event, x, y, flags, param):
       (points[i-1][0], points[i-1][1]), (0, 0, 0), 2)
 
   cv2.imshow('Select 4 points', temp_img)
+
+
+def draw_rois(frame, roi_list):
+  for (x, y, w, h) in roi_list:
+    cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
+
+def select_car(event, x, y, flags, param):
+  frame = param['frame']
+  rois = param['rois']
+
+  if event == cv2.EVENT_LBUTTONDOWN:
+    param['drawing'] = True
+    param['ix'], param['iy'] = x, y
+
+  elif event == cv2.EVENT_MOUSEMOVE:
+    if param.get('drawing', False):
+      frame_copy = frame.copy()
+      draw_rois(frame_copy, rois)
+      ix, iy = param['ix'], param['iy']
+      cv2.rectangle(frame_copy, (ix, iy), (x, y), (0, 255, 0), 2)
+      param['frame_copy'] = frame_copy
+
+  elif event == cv2.EVENT_LBUTTONUP:
+    if param.get('drawing', False):
+      param['drawing'] = False
+      ix, iy = param['ix'], param['iy']
+
+      x0, y0 = min(ix, x), min(iy, y)
+      w, h = abs(x - ix), abs(y - iy)
+      if w > 0 and h > 0:
+        rois.append((x0, y0, w, h))
+
+      frame_copy = frame.copy()
+      draw_rois(frame_copy, rois)
+      param['frame_copy'] = frame_copy
+
+    print("Finished")
+    print('===========================')
+
+  return rois
